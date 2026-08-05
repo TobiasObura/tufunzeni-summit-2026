@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Live Commitment Board — Tufunzeni Summit 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal:   #0E6656;
+    --orange: #E07B39;
+    --gold:   #D9A61A;
+    --navy:   #1F3A5F;
+    --bg:     #0A1F1B;
+    --card:   #112920;
+    --card-2: #0F2238;
+    --border: rgba(255,255,255,0.09);
+    --white:  #FFFFFF;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* ── LAYOUT SHELL ─────────────────────────────────────────── */
+  .shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── TOP BAR ──────────────────────────────────────────────── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.25);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .live-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:.45; transform:scale(.8); }
+  }
+  .topbar-text { min-width: 0; }
+  .topbar-label {
+    font-size: clamp(10px,1.1vw,13px); font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+  }
+  .topbar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(13px,1.5vw,18px); font-weight: 700; color: var(--white);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .topbar-stats { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+  .stat-chip { text-align: center; }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(20px,2.5vw,32px); font-weight: 800; color: var(--white); line-height: 1;
+    transition: color .4s, transform .4s;
+  }
+  .stat-val.bump { color: var(--gold); transform: scale(1.18); }
+  .stat-label {
+    font-size: clamp(10px,1vw,13px); color: rgba(255,255,255,.82);
+    letter-spacing: .05em; text-transform: uppercase; margin-top: 2px;
+  }
+  .topbar-divider { width: 1px; height: 32px; background: var(--border); }
+
+  /* ── BODY: two scrollable sections ───────────────────────── */
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* PILLARS SECTION — top half, scrollable horizontally on small screens */
+  .pillars-section {
+    flex: 0 0 55%;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid var(--border);
+    min-height: 0;
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 20px;
+    background: rgba(0,0,0,.15);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .section-header-title {
+    font-size: clamp(10px,.9vw,12px); font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+  }
+  .pillars-scroll {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 1px;
+    background: var(--border);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.15) transparent;
+  }
+  .pillars-scroll::-webkit-scrollbar { height: 4px; }
+  .pillars-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+
+  /* PILLAR COLUMN */
+  .pillar-col {
+    background: var(--card);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1 0 180px;   /* min 180px, grows equally */
+    min-width: 180px;
+  }
+  .pillar-col-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .pcol-num {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(10px,.9vw,13px); font-weight: 800;
+    color: var(--orange); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 3px;
+  }
+  .pcol-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(12px,1.2vw,16px); font-weight: 700; color: var(--white); line-height: 1.3;
+  }
+  .pcol-count { margin-top: 6px; display: flex; align-items: baseline; gap: 5px; }
+  .pcol-count-num {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(18px,2vw,28px); font-weight: 800; color: var(--gold); line-height: 1;
+    transition: transform .3s;
+  }
+  .pcol-count-num.bump { transform: scale(1.25); }
+  .pcol-count-label { font-size: clamp(10px,.9vw,12px); color: rgba(255,255,255,.72); }
+
+  .pillar-actions-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 14px 12px;
+    display: flex; flex-direction: column; gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.1) transparent;
+  }
+  .pillar-actions-list::-webkit-scrollbar { width: 3px; }
+  .pillar-actions-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); }
+
+  .action-bar-wrap {}
+  .action-bar-label {
+    font-size: clamp(11px,1vw,13px); color: rgba(255,255,255,.85);
+    line-height: 1.45; margin-bottom: 5px;
+  }
+  .action-bar-row { display: flex; align-items: center; gap: 8px; }
+  .action-bar-track {
+    flex: 1; height: 7px; background: rgba(255,255,255,.08);
+    border-radius: 4px; overflow: hidden;
+  }
+  .action-bar-fill {
+    height: 100%; border-radius: 4px; background: var(--teal);
+    width: 0%; transition: width .6s cubic-bezier(.4,0,.2,1);
+  }
+  .action-bar-count {
+    font-size: clamp(11px,1vw,14px); color: var(--gold);
+    font-weight: 700; flex-shrink: 0; min-width: 20px; text-align: right;
+  }
+
+  /* FEED SECTION — bottom half, scrollable */
+  .feed-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .feed-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.12) transparent;
+  }
+  .feed-scroll::-webkit-scrollbar { width: 4px; }
+  .feed-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.14); border-radius: 2px; }
+
+  .feed-item {
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex; align-items: flex-start; gap: 10px;
+    animation: fadeSlide .4s ease forwards;
+    flex-shrink: 0;
+  }
+  @keyframes fadeSlide {
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .feed-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0; margin-top: 5px;
+  }
+  .feed-text {
+    font-size: clamp(12px,1.1vw,15px); color: rgba(255,255,255,.9); line-height: 1.55;
+  }
+  .feed-empty {
+    font-size: clamp(12px,1.1vw,14px); color: rgba(255,255,255,.38);
+    font-style: italic; padding: 20px 0; text-align: center;
+  }
+
+  /* ── STATUS BAR ───────────────────────────────────────────── */
+  .statusbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 28px calc(7px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    background: rgba(0,0,0,.3);
+    gap: 12px; flex-wrap: wrap;
+  }
+  .statusbar-left { font-size: clamp(10px,.9vw,12px); color: rgba(255,255,255,.68); }
+  .statusbar-right {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(10px,.9vw,13px); font-weight: 700; color: var(--gold);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--teal); animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* ── MOBILE: stack vertically, both sections scroll ──────── */
+  @media (max-width: 700px) {
+    html, body { overflow: auto; height: auto; }
+    .shell { height: auto; min-height: 100vh; overflow: visible; }
+    .body  { flex-direction: column; overflow: visible; height: auto; }
+    .pillars-section { flex: none; height: auto; overflow: visible; border-bottom: 2px solid var(--border); }
+    .pillars-scroll  { flex-direction: column; overflow-x: visible; overflow-y: visible; height: auto; background: none; gap: 8px; padding: 8px; }
+    .pillar-col { flex: none; min-width: 0; width: 100%; }
+    .pillar-actions-list { overflow-y: visible; max-height: none; }
+    .feed-section { flex: none; height: auto; overflow: visible; }
+    .feed-scroll  { overflow-y: visible; max-height: none; }
+    .topbar { padding: 12px 16px; gap: 10px; }
+    .topbar-title { font-size: 14px; white-space: normal; line-height: 1.3; }
+    .topbar-stats { gap: 10px; }
+    .stat-val { font-size: 22px; }
+    .stat-label { font-size: 11px; }
+    .topbar-divider { height: 24px; }
+    .pcol-title { font-size: 14px; }
+    .pcol-count-num { font-size: 22px; }
+    .action-bar-label { font-size: 12px; }
+    .feed-text { font-size: 13px; }
+    .statusbar { padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); }
+    .statusbar-left { font-size: 11px; }
+    .statusbar-right { font-size: 11px; }
+    .section-header { padding: 8px 14px; }
+  }
+
+  @media (max-width: 400px) {
+    .topbar-stats { flex-wrap: wrap; gap: 8px; }
+    .topbar-divider { display: none; }
+    .stat-val { font-size: 20px; }
+    .pillar-col-header { padding: 12px 14px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="live-dot"></div>
+      <div class="topbar-text">
+        <div class="topbar-label">Live · Tufunzeni Teacher Summit 2026 · LakeHub, Kisumu</div>
+        <div class="topbar-title">The Future-Ready Teacher — Room Commitment Board</div>
+      </div>
+    </div>
+    <div class="topbar-stats">
+      <div class="stat-chip">
+        <div class="stat-val" id="statActions">0</div>
+        <div class="stat-label">Actions selected</div>
+      </div>
+      <div class="topbar-divider"></div>
+      <div class="stat-chip">
+        <div class="stat-val" id="statComplete">0</div>
+        <div class="stat-label">Full plans</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- TOP: PILLARS -->
+    <div class="pillars-section">
+      <div class="section-header">
+        <div class="live-dot"></div>
+        <div class="section-header-title">Pillar commitments — updating live</div>
+      </div>
+      <div class="pillars-scroll" id="pillarsScroll"></div>
+    </div>
+
+    <!-- BOTTOM: COMMITMENT FEED -->
+    <div class="feed-section">
+      <div class="section-header">
+        <div class="live-dot"></div>
+        <div class="section-header-title">Anonymous commitments from the room</div>
+      </div>
+      <div class="feed-scroll" id="feedScroll">
+        <div class="feed-empty" id="feedEmpty">Personal commitments will appear here as teachers complete all five pillars…</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <div class="statusbar-left" id="lastUpdate">Waiting for first commitment…</div>
+    <div class="statusbar-right">
+      <span class="status-dot"></span>
+      nextgenlearnershub.co.ke · Tufunzeni 2026
+    </div>
+  </div>
+
+</div>
+<script>
+const PILLARS = [
+  { num:'01', title:'The Great Skills Reset & Adult SEL', actions:[
+    'SEL self-assessment to identify emotional triggers',
+    'Weekly reflection habit — digital journal or e-portfolio',
+    'One AI competency training this term (DigCompEdu scale)',
+  ]},
+  { num:'02', title:'Ambient Learning & Digital Plasticity', actions:[
+    'Community-linked assignment per unit (outside school)',
+    'Map one lesson to CBC Community Service Learning strand',
+    'One always-on digital resource bank for students',
+  ]},
+  { num:'03', title:'Multi-Modal Mastery Blueprint', actions:[
+    'Redesign one topic using the full 9-step sequence',
+    'Build a bank of 60-second Hooks for every unit',
+    'Three modalities minimum per lesson (visual/audio/kinesthetic)',
+  ]},
+  { num:'04', title:'100% Mastery Rule & Human Gatekeeping', actions:[
+    '100% mastery threshold before any unit unlocks',
+    'AI (Nex) as Socratic partner only — not final judge',
+    'Prioritise qualitative feedback on Paper 2 marking',
+  ]},
+  { num:'05', title:'Interactive Session Design & Epistemic Reasoning', actions:[
+    'Rebuild one lesson with 35-min pacing blueprint',
+    'Visible timer to protect student talk-time',
+    'Two sharp discussion prompts per unit',
+  ]},
+];
+
+const STORAGE_KEY = 'tufunzeni2026_commitments';
+const FEED_KEY    = 'tufunzeni2026_feed';
+
+let state = {
+  pillarCounts: [0,0,0,0,0],
+  actionCounts: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]],
+  totalActions: 0, fullPlans: 0, feed: [],
+};
+
+function buildGrid() {
+  const scroll = document.getElementById('pillarsScroll');
+  PILLARS.forEach((p, pi) => {
+    const col = document.createElement('div');
+    col.className = 'pillar-col'; col.id = `pcol-${pi}`;
+    col.innerHTML = `
+      <div class="pillar-col-header">
+        <div class="pcol-num">Pillar ${p.num}</div>
+        <div class="pcol-title">${p.title}</div>
+        <div class="pcol-count">
+          <div class="pcol-count-num" id="pcol-count-${pi}">0</div>
+          <div class="pcol-count-label">committed</div>
+        </div>
+      </div>
+      <div class="pillar-actions-list">
+        ${p.actions.map((a,ai) => `
+          <div class="action-bar-wrap">
+            <div class="action-bar-label">${a}</div>
+            <div class="action-bar-row">
+              <div class="action-bar-track"><div class="action-bar-fill" id="bar-${pi}-${ai}"></div></div>
+              <div class="action-bar-count" id="barcount-${pi}-${ai}"></div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+    scroll.appendChild(col);
+  });
+}
+
+function renderState() {
+  // Stats
+  animateNum('statActions',  state.totalActions);
+  animateNum('statComplete', state.fullPlans);
+  document.getElementById('statActions').textContent  = state.totalActions;
+  document.getElementById('statComplete').textContent = state.fullPlans;
+
+  // Pillars
+  PILLARS.forEach((p, pi) => {
+    const countEl = document.getElementById(`pcol-count-${pi}`);
+    const newVal  = state.pillarCounts[pi] || 0;
+    if (parseInt(countEl.textContent||0) < newVal) {
+      countEl.classList.add('bump');
+      setTimeout(() => countEl.classList.remove('bump'), 400);
+    }
+    countEl.textContent = newVal;
+
+    const pillarMax = Math.max(1, ...(state.actionCounts[pi]||[0,0,0]));
+    (state.actionCounts[pi]||[0,0,0]).forEach((count, ai) => {
+      const pct = pillarMax > 0 ? (count / pillarMax) * 100 : 0;
+      const bar = document.getElementById(`bar-${pi}-${ai}`);
+      const cnt = document.getElementById(`barcount-${pi}-${ai}`);
+      if (bar) bar.style.width = pct + '%';
+      if (cnt) cnt.textContent = count > 0 ? count : '';
+    });
+  });
+
+  // Feed
+  renderFeed();
+
+  const now = new Date();
+  document.getElementById('lastUpdate').textContent =
+    `Last updated: ${now.toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+}
+
+function animateNum(id, newVal) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const oldVal = parseInt(el.textContent)||0;
+  if (newVal > oldVal) { el.classList.add('bump'); setTimeout(()=>el.classList.remove('bump'),500); }
+}
+
+function renderFeed() {
+  const scroll = document.getElementById('feedScroll');
+  const empty  = document.getElementById('feedEmpty');
+  const items  = scroll.querySelectorAll('.feed-item');
+  items.forEach(el => el.remove());
+
+  if (!state.feed || state.feed.length === 0) {
+    empty.style.display = 'block'; return;
+  }
+  empty.style.display = 'none';
+
+  // Show all, newest at top
+  [...state.feed].reverse().forEach(text => {
+    const item = document.createElement('div');
+    item.className = 'feed-item';
+    item.innerHTML = `<div class="feed-dot"></div><div class="feed-text">${esc(text)}</div>`;
+    scroll.insertBefore(item, scroll.firstChild);
+  });
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function loadState() {
+  try {
+    const r = await window.storage.get(STORAGE_KEY, true);
+    if (r && r.value) state = { ...state, ...JSON.parse(r.value) };
+  } catch(_) {}
+  try {
+    const r = await window.storage.get(FEED_KEY, true);
+    if (r && r.value) state.feed = JSON.parse(r.value);
+  } catch(_) {}
+  renderState();
+}
+
+buildGrid();
+loadState();
+setInterval(loadState, 4000);
+</script>
+</body>
+</html>

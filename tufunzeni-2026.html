@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Future-Ready Teacher — Tufunzeni Summit 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:   #0E6656;
+    --teal-light: #E6F2F0;
+    --orange: #E07B39;
+    --gold:   #D9A61A;
+    --gold-light: #FBF4DC;
+    --navy:   #1F3A5F;
+    --navy-light: #EAF0F8;
+    --bg:     #F7F6F2;
+    --white:  #FFFFFF;
+    --ink:    #1A1A1A;
+    --ink-2:  #444444;
+    --ink-3:  #888888;
+    --border: #E2E0DA;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .hero {
+    background: var(--teal);
+    padding: 48px 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(217,166,26,0.12);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 7vw, 42px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero-title span { color: var(--gold); }
+  .hero-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .hero-thesis {
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+  }
+
+  /* ── PROGRESS RING ────────────────────────────────────────── */
+  .progress-wrap {
+    background: var(--white);
+    margin: 0 16px;
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transform: translateY(-24px);
+    margin-bottom: -8px;
+  }
+  .ring-container { position: relative; flex-shrink: 0; width: 72px; height: 72px; }
+  .ring-svg { transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: #EEE; stroke-width: 6; }
+  .ring-fill  { fill: none; stroke: var(--teal); stroke-width: 6; stroke-linecap: round;
+    stroke-dasharray: 188; stroke-dashoffset: 188; transition: stroke-dashoffset 0.6s cubic-bezier(.4,0,.2,1), stroke 0.4s; }
+  .ring-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 800;
+    color: var(--teal);
+  }
+  .progress-text h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .progress-text p  { font-size: 13px; color: #555; line-height: 1.5; }
+
+  /* ── SECTION LABEL ────────────────────────────────────────── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #666;
+    padding: 24px 24px 12px;
+  }
+
+  /* ── PILLAR CARDS ─────────────────────────────────────────── */
+  .pillars { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .pillar-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1.5px solid transparent;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .pillar-card.committed {
+    border-color: var(--teal);
+    box-shadow: 0 2px 16px rgba(14,102,86,0.12);
+  }
+
+  .pillar-header {
+    display: flex;
+    align-items: center;
+    padding: 18px 18px 18px 0;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-height: 76px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pillar-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 80px;
+    font-weight: 800;
+    color: var(--orange);
+    opacity: 0.13;
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -4px;
+  }
+  .pillar-header-content { padding-left: 60px; flex: 1; min-width: 0; }
+  .pillar-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+  .pillar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  .pillar-chevron {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-left: 10px;
+    transition: transform 0.3s, background 0.2s;
+  }
+  .pillar-card.open .pillar-chevron { transform: rotate(180deg); background: var(--teal-light); }
+  .pillar-chevron svg { width: 14px; height: 14px; stroke: var(--ink-2); stroke-width: 2.2; fill: none; }
+  .pillar-card.open .pillar-chevron svg { stroke: var(--teal); }
+
+  .committed-badge {
+    display: none;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--teal);
+    background: var(--teal-light);
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-top: 5px;
+    width: fit-content;
+  }
+  .pillar-card.committed .committed-badge { display: block; }
+
+  /* ── PILLAR BODY ──────────────────────────────────────────── */
+  .pillar-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .pillar-card.open .pillar-body { display: block; }
+
+  .pillar-section { padding: 16px 18px; border-bottom: 1px solid var(--border); }
+  .pillar-section:last-child { border-bottom: none; }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .tag-shift  { color: var(--teal); }
+  .tag-evidence { color: var(--gold); }
+  .tag-insight  { color: var(--navy); }
+  .tag-action   { color: var(--orange); }
+
+  .shift-box {
+    background: var(--teal-light);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 500;
+    line-height: 1.55;
+  }
+  .evidence-box {
+    background: var(--gold-light);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #7A5800;
+    line-height: 1.55;
+  }
+  .evidence-box strong { color: var(--ink); display: block; margin-bottom: 3px; font-size: 12px; letter-spacing: 0.01em; }
+
+  /* insight textarea */
+  .insight-label {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .insight-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--bg);
+    resize: none;
+    min-height: 72px;
+    transition: border-color 0.2s;
+    outline: none;
+    line-height: 1.55;
+  }
+  .insight-input:focus { border-color: var(--teal); background: var(--white); }
+  .insight-input::placeholder { color: var(--ink-3); }
+
+  /* action chips */
+  .action-chips { display: flex; flex-direction: column; gap: 8px; }
+  .action-chip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .action-chip:hover { border-color: var(--orange); background: #FEF6EF; }
+  .action-chip.selected {
+    border-color: var(--navy);
+    background: var(--navy-light);
+  }
+  .chip-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    background: var(--white);
+  }
+  .action-chip.selected .chip-check {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+  .chip-check svg { display: none; }
+  .action-chip.selected .chip-check svg { display: block; }
+  .chip-text { font-size: 13px; color: var(--ink-2); line-height: 1.5; min-width: 0; word-break: break-word; }
+  .action-chip.selected .chip-text { color: var(--navy); font-weight: 500; }
+
+  .action-helper { font-size: 12px; color: #666; margin-bottom: 10px; }
+
+  /* ── 7-DAY CHALLENGE ──────────────────────────────────────── */
+  .challenge-wrap { padding: 0 16px; margin-top: 16px; }
+  .challenge-card {
+    background: var(--navy);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    color: #fff;
+  }
+  .challenge-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .challenge-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.25;
+  }
+  .challenge-checks { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .challenge-check {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .challenge-check.done {
+    background: rgba(14,102,86,0.35);
+    border-color: rgba(14,102,86,0.6);
+  }
+  .ccheck-box {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 2px solid rgba(255,255,255,0.35);
+    flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .challenge-check.done .ccheck-box { background: var(--teal); border-color: var(--teal); }
+  .ccheck-box svg { display: none; }
+  .challenge-check.done .ccheck-box svg { display: block; }
+  .ccheck-text { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.5; }
+  .challenge-check.done .ccheck-text { color: rgba(255,255,255,0.78); }
+
+  .commitment-input-wrap { margin-top: 4px; }
+  .commitment-label { font-size: 12px; color: rgba(255,255,255,0.85); margin-bottom: 8px; }
+  .commitment-input {
+    width: 100%;
+    background: rgba(255,255,255,0.09);
+    border: 1.5px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    min-height: 60px;
+    line-height: 1.55;
+  }
+  .commitment-input::placeholder { color: rgba(255,255,255,0.45); }
+  .commitment-input:focus { border-color: var(--gold); }
+
+  /* ── SUMMARY PANEL ────────────────────────────────────────── */
+  .summary-wrap { padding: 0 16px; margin-top: 12px; display: none; }
+  .summary-wrap.visible { display: block; }
+  .summary-card {
+    background: var(--teal);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .summary-card::after {
+    content: '✓';
+    position: absolute;
+    right: 16px; top: 12px;
+    font-size: 64px;
+    color: rgba(255,255,255,0.07);
+    font-weight: 800;
+    line-height: 1;
+  }
+  .summary-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  }
+  .summary-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 16px; line-height: 1.25;
+  }
+  .summary-actions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .summary-action {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 13px; color: rgba(255,255,255,0.88); line-height: 1.5;
+    min-width: 0;
+  }
+  .summary-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0; margin-top: 6px;
+  }
+  .summary-empty {
+    font-size: 13px; color: rgba(255,255,255,0.78);
+    font-style: italic;
+  }
+
+  /* ── QR SECTION ───────────────────────────────────────────── */
+  .qr-wrap { padding: 16px 16px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .qr-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px 14px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .qr-placeholder {
+    width: 72px; height: 72px;
+    background: var(--bg);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--ink-3); text-align: center; padding: 4px;
+    line-height: 1.3;
+  }
+  .qr-label { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .qr-sub   { font-size: 11px; color: var(--ink-3); line-height: 1.4; word-break: break-word; }
+
+  /* ── FOOTER ───────────────────────────────────────────────── */
+  .footer {
+    margin-top: 32px;
+    padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--teal); margin-bottom: 4px;
+  }
+  .footer-sub { font-size: 11px; color: var(--ink-3); line-height: 1.5; }
+
+  /* ── COMPLETION FLASH ─────────────────────────────────────── */
+  .completion-flash {
+    position: fixed; inset: 0;
+    background: rgba(14,102,86,0.92);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+    padding: 32px;
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+    text-align: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .completion-flash.show { opacity: 1; pointer-events: all; }
+  .flash-icon { font-size: 56px; margin-bottom: 16px; }
+  .flash-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px; font-weight: 800;
+    color: #fff; margin-bottom: 10px;
+  }
+  .flash-sub { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 24px; }
+  .flash-btn {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 100px;
+    padding: 14px 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+  }
+
+
+  /* ── PRINT STYLES ─────────────────────────────────────────── */
+  .print-btn {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 100px;
+    padding: 14px 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+  }
+  .print-btn:active { opacity: 0.85; }
+
+  @media print {
+    @page { margin: 18mm 14mm; size: A4; }
+    body { background: #fff !important; font-size: 11pt; }
+    .hero, .progress-wrap, .section-label, .pillars,
+    .challenge-wrap, .qr-wrap, .footer,
+    .completion-flash, .print-btn { display: none !important; }
+    .summary-wrap { display: block !important; padding: 0; margin: 0; }
+    .summary-card {
+      background: none !important;
+      color: #000 !important;
+      border: 1.5pt solid #0E6656;
+      border-radius: 8pt;
+      padding: 16pt 18pt;
+    }
+    .summary-card::after { display: none; }
+    .summary-eyebrow { color: #0E6656 !important; font-size: 8pt; letter-spacing: 0.12em; }
+    .summary-title { color: #000 !important; font-size: 14pt; margin-bottom: 12pt; }
+    .summary-action { color: #000 !important; font-size: 10pt; margin-bottom: 6pt; }
+    .summary-dot { background: #D9A61A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .print-header { display: block !important; }
+    .summary-commitment { display: block !important; }
+  }
+
+  .print-header {
+    display: none;
+    margin-bottom: 16pt;
+    border-bottom: 2pt solid #0E6656;
+    padding-bottom: 10pt;
+  }
+  .print-header h1 { font-family: 'Syne', sans-serif; font-size: 16pt; color: #0E6656; margin-bottom: 3pt; }
+  .print-header p  { font-size: 9pt; color: #666; }
+
+  .summary-commitment { display: none; margin-top: 14pt; padding-top: 12pt; border-top: 1pt solid #ddd; }
+  .summary-commitment h4 { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.1em; color: #888; margin-bottom: 6pt; }
+  .summary-commitment p  { font-size: 10pt; color: #000; min-height: 18pt; border-bottom: 0.5pt solid #ccc; padding-bottom: 4pt; }
+
+
+  /* ── MOBILE RESPONSIVENESS ────────────────────────────────── */
+
+  /* Ensure smooth scrolling throughout */
+  html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+
+  /* Hero: tighter on small screens */
+  @media (max-width: 480px) {
+    .hero { padding: 36px 18px 32px; }
+    .hero-title { font-size: 26px; }
+    .hero-thesis { font-size: 13px; padding: 12px 14px; }
+    .progress-wrap { padding: 18px 14px; gap: 14px; margin: 0 12px; }
+    .pillars { padding: 0 12px; }
+    .pillar-num { font-size: 68px; }
+    .pillar-title { font-size: 14px; }
+    .challenge-wrap { padding: 0 12px; }
+    .challenge-title { font-size: 16px; }
+    .ccheck-text { font-size: 12px; }
+    .summary-wrap { padding: 0 12px; }
+    .qr-wrap { padding: 12px 12px 0; gap: 8px; }
+    .qr-card { padding: 14px 10px; }
+    .qr-label { font-size: 11px; }
+    .section-label { padding: 20px 18px 10px; }
+    .hero-thesis { font-size: 13px; }
+    .progress-wrap { margin: 0 10px; padding: 18px 14px; gap: 14px; }
+    .ring-container { width: 60px; height: 60px; }
+    .ring-svg { width: 60px; height: 60px; }
+    .ring-label { font-size: 15px; }
+    .progress-text h3 { font-size: 14px; }
+    .progress-text p  { font-size: 12px; }
+    .pillars { padding: 0 10px; }
+    .pillar-header { padding: 14px 14px 14px 0; min-height: 68px; }
+    .pillar-header-content { padding-left: 52px; }
+    .pillar-num { font-size: 68px; }
+    .pillar-title { font-size: 14px; }
+    .pillar-section { padding: 14px 14px; }
+    .challenge-wrap { padding: 0 10px; }
+    .challenge-card { padding: 20px 16px; }
+    .summary-wrap { padding: 0 10px; }
+    .qr-wrap { padding: 12px 10px 0; gap: 8px; }
+    .qr-card { padding: 14px 10px; }
+    .qr-placeholder { width: 64px; height: 64px; }
+    .section-label { padding: 20px 18px 10px; }
+    .footer { padding: 20px 18px; }
+  }
+
+  /* Mid-range: tablets in portrait */
+  @media (min-width: 481px) and (max-width: 768px) {
+    .hero { padding: 44px 28px 36px; }
+    .pillars { padding: 0 14px; }
+    .challenge-wrap { padding: 0 14px; }
+    .summary-wrap { padding: 0 14px; }
+    .qr-wrap { padding: 14px 14px 0; }
+    .section-label { padding: 22px 20px 12px; }
+  }
+
+  /* Action chips: bigger tap targets on mobile */
+  @media (max-width: 600px) {
+    .action-chip { padding: 13px 14px; }
+    .chip-check  { width: 20px; height: 20px; }
+    .chip-text   { font-size: 13.5px; }
+    .challenge-check { padding: 12px 14px; }
+    .ccheck-box { width: 20px; height: 20px; border-radius: 5px; }
+    .ccheck-text { font-size: 13.5px; }
+    .insight-input { font-size: 14px; min-height: 80px; }
+    .commitment-input { font-size: 14px; }
+  }
+
+  /* Completion flash: full screen on mobile already, tweak button sizes */
+  @media (max-width: 480px) {
+    .flash-title { font-size: 22px; }
+    .flash-sub   { font-size: 13px; }
+    .flash-btn   { padding: 13px 22px; font-size: 13px; }
+    .completion-flash { padding: 28px 20px; }
+  }
+
+  /* QR cards: side by side always, but smaller on tiny screens */
+  @media (max-width: 360px) {
+    .qr-wrap { grid-template-columns: 1fr; }
+    .progress-wrap { flex-direction: column; text-align: center; }
+    .ring-container { margin: 0 auto; }
+    .pillar-header { min-height: 64px; }
+    .flash-title { font-size: 20px; }
+    .flash-sub { font-size: 13px; }
+    .flash-btn { padding: 12px 20px; font-size: 13px; }
+  }
+
+  /* Print button full width always */
+  .print-btn { max-width: 400px; margin-left: auto; margin-right: auto; }
+
+  @media (max-width: 480px) {
+    .print-btn { max-width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Tufunzeni Teacher Summit 2026 · LakeHub, Kisumu · 8 August 2026</div>
+  <h1 class="hero-title">The <span>Future-Ready</span> Teacher</h1>
+  <p class="hero-meta">Tobias Obura · Deputy Principal, Consolata School<br>Your professional reflection & commitment tool</p>
+  <div class="hero-thesis">"Technology does not replace great teachers — it amplifies them."</div>
+</div>
+
+<!-- PROGRESS RING -->
+<div class="progress-wrap">
+  <div class="ring-container">
+    <svg class="ring-svg" width="72" height="72" viewBox="0 0 72 72">
+      <circle class="ring-track" cx="36" cy="36" r="30"/>
+      <circle class="ring-fill" id="ringFill" cx="36" cy="36" r="30"/>
+    </svg>
+    <div class="ring-label" id="ringLabel">0/5</div>
+  </div>
+  <div class="progress-text">
+    <h3 id="progressTitle">Build your commitment</h3>
+    <p id="progressSub">Tap each pillar, reflect, and select your 7-day action. Complete all five to unlock your personal plan.</p>
+  </div>
+</div>
+
+<!-- PILLAR SECTION LABEL -->
+<div class="section-label">The Five Pillars</div>
+
+<!-- PILLARS -->
+<div class="pillars" id="pillarsContainer"></div>
+
+<!-- 7-DAY CHALLENGE -->
+<div class="challenge-wrap">
+  <div class="challenge-card">
+    <div class="challenge-eyebrow">7-Day Challenge</div>
+    <h2 class="challenge-title">Your first steps start Monday morning</h2>
+    <div class="challenge-checks" id="challengeChecks">
+      <div class="challenge-check" onclick="toggleCheck(this)">
+        <div class="ccheck-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ccheck-text">Redesign one core topic using the Multi-Modal Mastery Blueprint — move quickly through exploration, carefully through commitment.</div>
+      </div>
+      <div class="challenge-check" onclick="toggleCheck(this)">
+        <div class="ccheck-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ccheck-text">Hold the line on 100% mastery — use the Nex AI Tutor for Socratic scaffolding. No student advances until foundational gaps are closed.</div>
+      </div>
+      <div class="challenge-check" onclick="toggleCheck(this)">
+        <div class="ccheck-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="ccheck-text">Bridge the gap — create one assignment requiring data collection outside school walls, aligned with the CBC Community Service Learning strand.</div>
+      </div>
+    </div>
+    <div class="commitment-input-wrap">
+      <div class="commitment-label">My specific commitment this week:</div>
+      <textarea class="commitment-input" id="commitmentText" placeholder="I commit to..." rows="2" oninput="clearTimeout(window._feedTimer);window._feedTimer=setTimeout(publishToScreen,1500)"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-wrap" id="summaryWrap">
+  <div class="summary-card">
+    <div class="print-header">
+      <h1>The Future-Ready Teacher — My Action Plan</h1>
+      <p>Tufunzeni Teacher Summit 2026 · LakeHub, Kisumu · 8 August 2026 · Tobias Obura, Deputy Principal, Consolata School</p>
+    </div>
+    <div class="summary-eyebrow">Your Personal Action Plan</div>
+    <div class="summary-title">5 commitments. 5 pillars. Starting this week.</div>
+    <div class="summary-actions" id="summaryActions">    <div class="summary-commitment" id="summaryCommitment">
+      <h4>My specific commitment this week</h4>
+      <p id="summaryCommitmentText"></p>
+    </div>
+  </div>
+  <button class="print-btn" id="printBtn" style="display:none" onclick="printPlan()">⬇ Save or print my plan</button>
+</div>
+
+<!-- QR CODES -->
+<div class="section-label" style="padding-top:28px">Continue beyond today</div>
+<div class="qr-wrap">
+  <div class="qr-card">
+    <div class="qr-placeholder">QR Code<br>This Tool</div>
+    <div class="qr-label">This Worksheet</div>
+    <div class="qr-sub">Revisit your commitments anytime</div>
+  </div>
+  <div class="qr-card">
+    <div class="qr-placeholder">QR Code<br>NGL Hub</div>
+    <div class="qr-label">NextGen Learners Hub</div>
+    <div class="qr-sub">Try the free Unit 1 demo today</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">NextGen Learners Hub</div>
+  <div class="footer-sub">nextgenlearnershub.co.ke · Empowering Kenyan learners through AI-amplified education</div>
+</div>
+
+<!-- COMPLETION FLASH -->
+<div class="completion-flash" id="completionFlash">
+  <div class="flash-icon">🎯</div>
+  <div class="flash-title">You're committed.</div>
+  <div class="flash-sub">All five pillars locked in. Your personal plan is ready below.<br>This is what future-ready looks like.</div>
+  <button class="flash-btn" onclick="dismissFlash()">See my plan →</button>
+  <button class="flash-btn" style="margin-top:10px;background:rgba(255,255,255,0.15);color:#fff" onclick="dismissFlash();setTimeout(()=>printPlan(),400)">⬇ Save or print now</button>
+</div>
+
+<script>
+const PILLARS = [
+  {
+    num: '01',
+    tag: 'Pillar 01',
+    title: 'The Great Skills Reset & Adult SEL',
+    shift: 'From delivering routine information to facilitating high-level cognitive discovery and independent analytical thinking.',
+    evidence: [
+      { label: 'WEF Future of Jobs 2025', text: 'Analytical thinking is the most valued skill for 2025 — 7 in 10 companies consider it essential. 39% of core skills are expected to shift by 2030.' },
+      { label: 'Burnout Reality', text: '97% of educators report burnout. Building personal resilience, flexibility, and agility is a professional necessity, not optional.' },
+    ],
+    actions: [
+      'Complete a personal SEL self-assessment to identify my own emotional triggers this week.',
+      'Start a weekly reflection habit — digital journal or e-portfolio to track pedagogical growth.',
+      'Commit to one AI competency training this term to move from "Newcomer" to "Explorer" on the DigCompEdu scale.',
+    ]
+  },
+  {
+    num: '02',
+    tag: 'Pillar 02',
+    title: 'Ambient Learning & Digital Plasticity',
+    shift: 'From measuring "seat-time" to facilitating wall-less learning rooted in the KICD Rationalised Curriculum and Community Service Learning.',
+    evidence: [
+      { label: 'CBC Mandate', text: 'Kenya\'s CBE framework requires Community Service Learning (CSL) as a formal strand — the wall-less classroom is policy, not just theory.' },
+      { label: 'Practical Example', text: 'Grade 10 Business Studies: a lesson on money becomes an investigation of local mobile money agents. IGCSE Economics: scarcity documented in Kisumu\'s own markets.' },
+    ],
+    actions: [
+      'Design one community-linked assignment per unit requiring data collection outside school walls.',
+      'Map one lesson specifically to the CBC Community Service Learning (CSL) strand.',
+      'Point students toward one always-on digital resource bank to explore before we meet in person.',
+    ]
+  },
+  {
+    num: '03',
+    tag: 'Pillar 03',
+    title: 'Multi-Modal Mastery Blueprint',
+    shift: 'From a single teaching style to becoming a Learning Experience Designer using a 9-step sequence to reduce the cost of exploration.',
+    evidence: [
+      { label: 'ISTE Designer Standard', text: 'Educators create authentic, learner-driven activities that recognise learner variability. One style reaches one type of learner.' },
+      { label: 'The 9-Step Blueprint', text: 'Hook → Key Vocabulary → Video → Infographic → Slides → Podcast → AI Practice → Hands-on Task → 100% Gatekeeper Quiz' },
+    ],
+    actions: [
+      'Redesign one core topic this month using the full nine-step sequence on my LMS.',
+      'Build a bank of 60-second Hooks for every unit — grab student attention in the first minute.',
+      'Ensure every lesson uses at least three different modalities: visual, auditory, and kinesthetic.',
+    ]
+  },
+  {
+    num: '04',
+    tag: 'Pillar 04',
+    title: '100% Mastery Rule & Human Gatekeeping',
+    shift: 'Distinguishing between Performance (polished AI output) and Competence (the student\'s ability to defend reasoning) — the teacher is the final authority.',
+    evidence: [
+      { label: 'UNESCO AI Competency Framework 2024', text: 'AI should support teachers\' pedagogical decision-making, not substitute for it. The human teacher remains the final authority on qualitative assessment.' },
+      { label: 'Kenya Reality Check', text: 'Teachers are already digitally confident. The primary gap is ICT infrastructure, not teacher willingness. (Aga Khan University, 2023)' },
+    ],
+    actions: [
+      'Set a 100% mastery threshold on digital formative quizzes before any unit "unlocks."',
+      'Use AI (Nex) as a Socratic practice partner only — never as the final judge of written work.',
+      'Prioritise my time for qualitative feedback on Paper 2 data response marking.',
+    ]
+  },
+  {
+    num: '05',
+    tag: 'Pillar 05',
+    title: 'Interactive Session Design & Epistemic Reasoning',
+    shift: 'From static lectures to a 35-minute pacing loop (5m Hook · 15m Core · 7m Talk · 8m Demo) that prioritises how we know what we claim to know.',
+    evidence: [
+      { label: 'ISTE Leadership Standard', text: 'Leaders model a culture of innovation where data-informed instruction and agile feedback loops are the norm — not just end-of-term reports.' },
+      { label: 'Epistemic Intelligence', text: 'The capacity to determine how we know what we claim to know is the skill AI cannot replicate. It must be cultivated in every session.' },
+    ],
+    actions: [
+      'Rebuild one upcoming lesson using the 35-minute pacing blueprint: 5m Hook, 15m Core, 7m Talk, 8m Demo.',
+      'Use a visible timer during class to protect student talk-time and inquiry space.',
+      'Prepare two sharp discussion prompts per unit that force students to argue different perspectives.',
+    ]
+  }
+];
+
+const selectedActions = {};
+const insightTexts = {};
+let committedCount = 0;
+let flashShown = false;
+
+function buildPillars() {
+  const container = document.getElementById('pillarsContainer');
+  PILLARS.forEach((p, pi) => {
+    const card = document.createElement('div');
+    card.className = 'pillar-card';
+    card.id = `pillar-${pi}`;
+
+    card.innerHTML = `
+      <div class="pillar-header" onclick="togglePillar(${pi})">
+        <div class="pillar-num">${p.num}</div>
+        <div class="pillar-header-content">
+          <div class="pillar-tag">${p.tag}</div>
+          <div class="pillar-title">${p.title}</div>
+          <div class="committed-badge">✓ Action committed</div>
+        </div>
+        <div class="pillar-chevron">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="pillar-body">
+        <div class="pillar-section">
+          <div class="section-tag tag-shift">The Shift</div>
+          <div class="shift-box">${p.shift}</div>
+        </div>
+        <div class="pillar-section">
+          <div class="section-tag tag-evidence">The Evidence</div>
+          ${p.evidence.map(e => `<div class="evidence-box" style="margin-bottom:8px"><strong>${e.label}</strong>${e.text}</div>`).join('')}
+        </div>
+        <div class="pillar-section">
+          <div class="section-tag tag-insight">One insight that stood out to me</div>
+          <div class="insight-label">What will you carry out of this room?</div>
+          <textarea class="insight-input" placeholder="Write your insight here…" oninput="saveInsight(${pi}, this.value)" rows="2"></textarea>
+        </div>
+        <div class="pillar-section">
+          <div class="section-tag tag-action">My 7-day action</div>
+          <div class="action-helper">Select one action you will take before next Saturday.</div>
+          <div class="action-chips">
+            ${p.actions.map((a, ai) => `
+              <div class="action-chip" onclick="selectAction(${pi}, ${ai}, this)">
+                <div class="chip-check">
+                  <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="chip-text">${a}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function togglePillar(pi) {
+  const card = document.getElementById(`pillar-${pi}`);
+  const isOpen = card.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.pillar-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
+
+function saveInsight(pi, val) {
+  insightTexts[pi] = val;
+}
+
+function selectAction(pi, ai, el) {
+  const card = document.getElementById(`pillar-${pi}`);
+  const chips = card.querySelectorAll('.action-chip');
+  const wasSelected = el.classList.contains('selected');
+
+  chips.forEach(c => c.classList.remove('selected'));
+
+  if (!wasSelected) {
+    el.classList.add('selected');
+    const wasCommitted = selectedActions[pi] !== undefined;
+    selectedActions[pi] = ai;
+    if (!wasCommitted) {
+      committedCount++;
+      card.classList.add('committed');
+      updateProgress();
+    }
+  } else {
+    delete selectedActions[pi];
+    committedCount = Math.max(0, committedCount - 1);
+    card.classList.remove('committed');
+    updateProgress();
+  }
+
+  updateSummary();
+}
+
+function updateProgress() {
+  const total = 5;
+  const pct = committedCount / total;
+  const circumference = 188;
+  const offset = circumference - (pct * circumference);
+  const ring = document.getElementById('ringFill');
+  ring.style.strokeDashoffset = offset;
+
+  if (committedCount === total) {
+    ring.style.stroke = '#D9A61A';
+  } else {
+    ring.style.stroke = '#0E6656';
+  }
+
+  document.getElementById('ringLabel').textContent = `${committedCount}/5`;
+
+  const titles = [
+    'Build your commitment',
+    'One down — keep going',
+    'Good momentum',
+    'Almost there',
+    'One more pillar',
+    'Plan complete ✓'
+  ];
+  const subs = [
+    'Tap each pillar, reflect, and select your 7-day action. Complete all five to unlock your personal plan.',
+    'Four pillars remaining. Each action you commit to is a professional promise to your students.',
+    'Three pillars remaining. You\'re building a future-ready practice one commitment at a time.',
+    'Two pillars remaining. The classroom of tomorrow is being shaped in rooms like this one today.',
+    'One pillar remaining. Finish strong — your plan unlocks when you commit to all five.',
+    'All five pillars committed. Your personal action plan is ready below.'
+  ];
+
+  document.getElementById('progressTitle').textContent = titles[committedCount];
+  document.getElementById('progressSub').textContent = subs[committedCount];
+
+  if (committedCount === total && !flashShown) {
+    flashShown = true;
+    setTimeout(() => {
+      document.getElementById('completionFlash').classList.add('show');
+    }, 400);
+  }
+}
+
+function updateSummary() {
+  const wrap = document.getElementById('summaryWrap');
+  const container = document.getElementById('summaryActions');
+
+  if (committedCount === 0) {
+    wrap.classList.remove('visible');
+    return;
+  }
+
+  wrap.classList.add('visible');
+  container.innerHTML = '';
+
+  Object.entries(selectedActions).forEach(([pi, ai]) => {
+    const p = PILLARS[pi];
+    const div = document.createElement('div');
+    div.className = 'summary-action';
+    div.innerHTML = `<div class="summary-dot"></div><div><strong style="display:block;font-size:11px;opacity:0.65;margin-bottom:2px">${p.tag}: ${p.title}</strong>${p.actions[ai]}</div>`;
+    container.appendChild(div);
+  });
+
+  if (Object.keys(selectedActions).length === 0) {
+    container.innerHTML = '<div class="summary-empty">Your committed actions will appear here as you work through the pillars.</div>';
+  }
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('done');
+}
+
+function dismissFlash() {
+  document.getElementById('completionFlash').classList.remove('show');
+  document.getElementById('summaryWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+
+// ── SHARED STORAGE: publish to projector screen ───────────────
+const STORAGE_KEY = 'tufunzeni2026_commitments';
+const FEED_KEY    = 'tufunzeni2026_feed';
+
+async function publishToScreen() {
+  try {
+    // Build pillar counts and action counts from current state
+    const pillarCounts  = [0,0,0,0,0];
+    const actionCounts  = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+    let   totalActions  = 0;
+    let   fullPlans     = 0;
+
+    // Read existing aggregate, increment
+    let existing = { pillarCounts:[0,0,0,0,0], actionCounts:[[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]], totalActions:0, fullPlans:0 };
+    try {
+      const r = await window.storage.get(STORAGE_KEY, true);
+      if (r && r.value) existing = JSON.parse(r.value);
+    } catch(_) {}
+
+    // For this teacher's current selections, mark what changed
+    // We store a session key so we only count once per device
+    const sessionKey = 'tufunzeni2026_session';
+    let prevSel = {};
+    try {
+      const sp = await window.storage.get(sessionKey, false);
+      if (sp && sp.value) prevSel = JSON.parse(sp.value);
+    } catch(_) {}
+
+    // Remove previous contributions from aggregate
+    Object.entries(prevSel).forEach(([pi, ai]) => {
+      const pii = parseInt(pi), aii = parseInt(ai);
+      existing.pillarCounts[pii]      = Math.max(0, (existing.pillarCounts[pii]||0) - 1);
+      existing.actionCounts[pii][aii] = Math.max(0, (existing.actionCounts[pii][aii]||0) - 1);
+      existing.totalActions           = Math.max(0, (existing.totalActions||0) - 1);
+      if (Object.keys(prevSel).length === 5) {
+        existing.fullPlans = Math.max(0, (existing.fullPlans||0) - 1);
+      }
+    });
+
+    // Add current contributions
+    Object.entries(selectedActions).forEach(([pi, ai]) => {
+      const pii = parseInt(pi), aii = parseInt(ai);
+      if (!existing.pillarCounts) existing.pillarCounts = [0,0,0,0,0];
+      if (!existing.actionCounts) existing.actionCounts = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
+      existing.pillarCounts[pii]      = (existing.pillarCounts[pii]||0) + 1;
+      existing.actionCounts[pii][aii] = (existing.actionCounts[pii][aii]||0) + 1;
+      existing.totalActions           = (existing.totalActions||0) + 1;
+    });
+    if (Object.keys(selectedActions).length === 5) {
+      existing.fullPlans = (existing.fullPlans||0) + 1;
+    }
+
+    await window.storage.set(STORAGE_KEY, JSON.stringify(existing), true);
+    await window.storage.set(sessionKey, JSON.stringify(selectedActions), false);
+
+    // Publish commitment text to feed (anonymous) when all 5 done
+    if (committedCount === 5) {
+      const txt = document.getElementById('commitmentText').value.trim();
+      if (txt) {
+        let feed = [];
+        try {
+          const fr = await window.storage.get(FEED_KEY, true);
+          if (fr && fr.value) feed = JSON.parse(fr.value);
+        } catch(_) {}
+        // Avoid duplicates from same device
+        feed = feed.filter(f => f !== txt);
+        feed.push(txt);
+        if (feed.length > 20) feed = feed.slice(-20);
+        await window.storage.set(FEED_KEY, JSON.stringify(feed), true);
+      }
+    }
+  } catch(e) {
+    console.warn('Storage write failed (offline?):', e);
+  }
+}
+
+buildPillars();
+updateSummary();
+
+function printPlan() {
+  // Sync commitment text into print view
+  const txt = document.getElementById('commitmentText').value.trim();
+  const el = document.getElementById('summaryCommitmentText');
+  if (el) el.textContent = txt || '(no commitment entered)';
+  window.print();
+}
+
+// Show print button once all 5 committed
+const _origUpdateProgress = updateProgress;
+// Patch: after updateProgress runs, show print btn if complete
+const _origSelectAction = selectAction;
+selectAction = function(pi, ai, el) {
+  _origSelectAction(pi, ai, el);
+  document.getElementById('printBtn').style.display = committedCount === 5 ? 'block' : 'none';
+  publishToScreen();
+};
+
+</script>
+</body>
+</html>
