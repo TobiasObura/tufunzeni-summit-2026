@@ -380,9 +380,6 @@ const PILLARS = [
   ]},
 ];
 
-const STORAGE_KEY = 'tufunzeni2026_commitments';
-const FEED_KEY    = 'tufunzeni2026_feed';
-
 let state = {
   pillarCounts: [0,0,0,0,0],
   actionCounts: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]],
@@ -485,13 +482,13 @@ function esc(s) {
 
 async function loadState() {
   try {
-    const r = await window.storage.get(STORAGE_KEY, true);
-    if (r && r.value) state = { ...state, ...JSON.parse(r.value) };
-  } catch(_) {}
-  try {
-    const r = await window.storage.get(FEED_KEY, true);
-    if (r && r.value) state.feed = JSON.parse(r.value);
-  } catch(_) {}
+    const res = await fetch('/api/state', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`state fetch failed: ${res.status}`);
+    const data = await res.json();
+    state = { ...state, ...data };
+  } catch(e) {
+    console.warn('Live state fetch failed (offline?):', e);
+  }
   renderState();
 }
 

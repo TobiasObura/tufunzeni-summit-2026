@@ -1023,78 +1023,30 @@ function dismissFlash() {
 
 
 // ── SHARED STORAGE: publish to projector screen ───────────────
-const STORAGE_KEY = 'tufunzeni2026_commitments';
-const FEED_KEY    = 'tufunzeni2026_feed';
+const SESSION_KEY = 'tufunzeni2026_session';
 
 async function publishToScreen() {
   try {
-    // Build pillar counts and action counts from current state
-    const pillarCounts  = [0,0,0,0,0];
-    const actionCounts  = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
-    let   totalActions  = 0;
-    let   fullPlans     = 0;
-
-    // Read existing aggregate, increment
-    let existing = { pillarCounts:[0,0,0,0,0], actionCounts:[[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]], totalActions:0, fullPlans:0 };
-    try {
-      const r = await window.storage.get(STORAGE_KEY, true);
-      if (r && r.value) existing = JSON.parse(r.value);
-    } catch(_) {}
-
-    // For this teacher's current selections, mark what changed
-    // We store a session key so we only count once per device
-    const sessionKey = 'tufunzeni2026_session';
     let prevSel = {};
     try {
-      const sp = await window.storage.get(sessionKey, false);
-      if (sp && sp.value) prevSel = JSON.parse(sp.value);
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (raw) prevSel = JSON.parse(raw);
     } catch(_) {}
 
-    // Remove previous contributions from aggregate
-    Object.entries(prevSel).forEach(([pi, ai]) => {
-      const pii = parseInt(pi), aii = parseInt(ai);
-      existing.pillarCounts[pii]      = Math.max(0, (existing.pillarCounts[pii]||0) - 1);
-      existing.actionCounts[pii][aii] = Math.max(0, (existing.actionCounts[pii][aii]||0) - 1);
-      existing.totalActions           = Math.max(0, (existing.totalActions||0) - 1);
-      if (Object.keys(prevSel).length === 5) {
-        existing.fullPlans = Math.max(0, (existing.fullPlans||0) - 1);
-      }
+    const commitmentText = committedCount === 5
+      ? document.getElementById('commitmentText').value.trim()
+      : '';
+
+    const res = await fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prevSelection: prevSel, newSelection: selectedActions, commitmentText })
     });
+    if (!res.ok) throw new Error(`state update failed: ${res.status}`);
 
-    // Add current contributions
-    Object.entries(selectedActions).forEach(([pi, ai]) => {
-      const pii = parseInt(pi), aii = parseInt(ai);
-      if (!existing.pillarCounts) existing.pillarCounts = [0,0,0,0,0];
-      if (!existing.actionCounts) existing.actionCounts = [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]];
-      existing.pillarCounts[pii]      = (existing.pillarCounts[pii]||0) + 1;
-      existing.actionCounts[pii][aii] = (existing.actionCounts[pii][aii]||0) + 1;
-      existing.totalActions           = (existing.totalActions||0) + 1;
-    });
-    if (Object.keys(selectedActions).length === 5) {
-      existing.fullPlans = (existing.fullPlans||0) + 1;
-    }
-
-    await window.storage.set(STORAGE_KEY, JSON.stringify(existing), true);
-    await window.storage.set(sessionKey, JSON.stringify(selectedActions), false);
-
-    // Publish commitment text to feed (anonymous) when all 5 done
-    if (committedCount === 5) {
-      const txt = document.getElementById('commitmentText').value.trim();
-      if (txt) {
-        let feed = [];
-        try {
-          const fr = await window.storage.get(FEED_KEY, true);
-          if (fr && fr.value) feed = JSON.parse(fr.value);
-        } catch(_) {}
-        // Avoid duplicates from same device
-        feed = feed.filter(f => f !== txt);
-        feed.push(txt);
-        if (feed.length > 20) feed = feed.slice(-20);
-        await window.storage.set(FEED_KEY, JSON.stringify(feed), true);
-      }
-    }
+    localStorage.setItem(SESSION_KEY, JSON.stringify(selectedActions));
   } catch(e) {
-    console.warn('Storage write failed (offline?):', e);
+    console.warn('Live sync failed (offline?):', e);
   }
 }
 
