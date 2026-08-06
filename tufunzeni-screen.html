@@ -4,353 +4,308 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Live Commitment Board — Tufunzeni Summit 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --teal:   #0E6656;
-    --orange: #E07B39;
-    --gold:   #D9A61A;
-    --navy:   #1F3A5F;
-    --bg:     #0A1F1B;
-    --card:   #112920;
-    --card-2: #0F2238;
-    --border: rgba(255,255,255,0.09);
-    --white:  #FFFFFF;
+    /* deep teal-charcoal ground, not literal black — ties to the summit's teal brand */
+    --ground:      #0B1D17;
+    --panel:       #12291F;
+    --panel-raised:#173428;
+    --rule:        rgba(244,238,224,0.13);
+    --rule-strong: rgba(244,238,224,0.24);
+    --ink:         #F4EFE2;
+    --ink-dim:     rgba(244,239,228,0.56);
+    --ink-faint:   rgba(244,239,228,0.32);
+    --gold:        #E7B23E;
+    --coral:       #DD6B42;
+    --crease:      rgba(0,0,0,0.4);
   }
 
   html, body {
     height: 100%;
     font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--white);
+    background: var(--ground);
+    color: var(--ink);
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
   }
 
-  /* ── LAYOUT SHELL ─────────────────────────────────────────── */
-  .shell {
+  .board {
     display: flex;
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
   }
 
-  /* ── TOP BAR ──────────────────────────────────────────────── */
-  .topbar {
+  /* ── HEADER MARQUEE ───────────────────────────────────────── */
+  .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 28px;
-    border-bottom: 1px solid var(--border);
+    gap: 20px;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--rule);
     flex-shrink: 0;
-    background: rgba(0,0,0,0.25);
-    gap: 16px;
-    flex-wrap: wrap;
+    background: linear-gradient(180deg, rgba(231,178,62,0.06), transparent);
   }
-  .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .header-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .live-dot {
     width: 10px; height: 10px; border-radius: 50%;
     background: var(--gold); flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(231,178,62,0.18);
     animation: pulse 2s ease-in-out infinite;
   }
   @keyframes pulse {
-    0%,100% { opacity:1; transform:scale(1); }
-    50%      { opacity:.45; transform:scale(.8); }
+    0%,100% { opacity: 1; }
+    50%     { opacity: .4; }
   }
-  .topbar-text { min-width: 0; }
-  .topbar-label {
-    font-size: clamp(10px,1.1vw,13px); font-weight: 600;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--gold);
+  .header-text { min-width: 0; }
+  .header-eyebrow {
+    font-size: clamp(10px,1vw,12px); font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--gold);
   }
-  .topbar-title {
+  .header-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(13px,1.5vw,18px); font-weight: 700; color: var(--white);
+    font-size: clamp(15px,1.7vw,22px); font-weight: 800; color: var(--ink);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .topbar-stats { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
-  .stat-chip { text-align: center; }
-  .stat-val {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(20px,2.5vw,32px); font-weight: 800; color: var(--white); line-height: 1;
-    transition: color .4s, transform .4s;
-  }
-  .stat-val.bump { color: var(--gold); transform: scale(1.18); }
-  .stat-label {
-    font-size: clamp(10px,1vw,13px); color: rgba(255,255,255,.82);
-    letter-spacing: .05em; text-transform: uppercase; margin-top: 2px;
-  }
-  .topbar-divider { width: 1px; height: 32px; background: var(--border); }
-
-  /* ── BODY: two scrollable sections ───────────────────────── */
-  .body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-height: 0;
-  }
-
-  /* PILLARS SECTION — top half, scrollable horizontally on small screens */
-  .pillars-section {
-    flex: 0 0 55%;
-    display: flex;
-    flex-direction: column;
-    border-bottom: 2px solid var(--border);
-    min-height: 0;
-    overflow: hidden;
-  }
-  .section-header {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 20px;
-    background: rgba(0,0,0,.15);
-    border-bottom: 1px solid var(--border);
+  .header-clock {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(14px,1.6vw,20px); font-weight: 500; color: var(--ink-dim);
     flex-shrink: 0;
   }
-  .section-header-title {
-    font-size: clamp(10px,.9vw,12px); font-weight: 600;
-    letter-spacing: .12em; text-transform: uppercase;
-    color: rgba(255,255,255,.6);
+
+  /* ── HERO STRIP: two split-flap totals ───────────────────── */
+  .hero {
+    display: flex;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--rule);
   }
-  .pillars-scroll {
+  .hero-stat {
     flex: 1;
     display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 1px;
-    background: var(--border);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.15) transparent;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 28px;
   }
-  .pillars-scroll::-webkit-scrollbar { height: 4px; }
-  .pillars-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+  .hero-stat + .hero-stat { border-left: 1px solid var(--rule); }
+  .hero-stat-label {
+    font-size: clamp(11px,1vw,13px); font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-dim);
+    max-width: 11ch; line-height: 1.4;
+  }
+  .flap-group { display: flex; gap: 4px; perspective: 400px; margin-left: auto; }
+  .flap-digit {
+    position: relative;
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    background: var(--panel-raised);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    transform-style: preserve-3d;
+  }
+  .flap-digit::after {
+    content: '';
+    position: absolute; left: 0; right: 0; top: 50%;
+    height: 1px; background: var(--crease);
+    transform: translateY(-.5px);
+  }
+  .hero .flap-digit { width: clamp(30px,3.6vw,54px); height: clamp(46px,6.4vh,84px); font-size: clamp(24px,4.6vh,56px); border-radius: 6px; }
+  @keyframes flapFlip {
+    0%   { transform: rotateX(0deg); }
+    48%  { transform: rotateX(-90deg); }
+    52%  { transform: rotateX(-90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+  .flap-digit.flipping { animation: flapFlip .38s ease-in-out; }
 
-  /* PILLAR COLUMN */
-  .pillar-col {
-    background: var(--card);
+  /* ── GATES GRID: one column per pillar ───────────────────── */
+  .gates {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    min-height: 0;
+    overflow: hidden;
+  }
+  .gate {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    flex: 1 0 180px;   /* min 180px, grows equally */
-    min-width: 180px;
+    min-width: 0;
+    min-height: 0;
+    background: var(--panel);
+    border-right: 1px solid var(--rule);
   }
-  .pillar-col-header {
-    padding: 14px 16px 10px;
-    border-bottom: 1px solid var(--border);
+  .gate:last-child { border-right: none; }
+  .gate-head {
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--rule);
     flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
   }
-  .pcol-num {
+  .gate-head-text { min-width: 0; }
+  .gate-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(10px,.85vw,12px); font-weight: 500;
+    letter-spacing: .1em; color: var(--coral);
+  }
+  .gate-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(10px,.9vw,13px); font-weight: 800;
-    color: var(--orange); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 3px;
+    font-size: clamp(12px,1.15vw,15px); font-weight: 700; color: var(--ink);
+    line-height: 1.28; margin-top: 2px;
   }
-  .pcol-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(12px,1.2vw,16px); font-weight: 700; color: var(--white); line-height: 1.3;
+  .gate .flap-group { margin-left: 0; flex-shrink: 0; perspective: 200px; }
+  .gate .flap-digit { width: clamp(16px,1.7vw,24px); height: clamp(24px,3vh,36px); font-size: clamp(13px,1.9vh,20px); }
+  .gate-count-label {
+    font-size: clamp(8px,.7vw,10px); color: var(--ink-faint);
+    text-transform: uppercase; letter-spacing: .08em;
+    text-align: right; margin-top: 3px;
   }
-  .pcol-count { margin-top: 6px; display: flex; align-items: baseline; gap: 5px; }
-  .pcol-count-num {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(18px,2vw,28px); font-weight: 800; color: var(--gold); line-height: 1;
-    transition: transform .3s;
-  }
-  .pcol-count-num.bump { transform: scale(1.25); }
-  .pcol-count-label { font-size: clamp(10px,.9vw,12px); color: rgba(255,255,255,.72); }
 
-  .pillar-actions-list {
+  .gate-actions {
     flex: 1;
-    overflow-y: auto;
-    padding: 10px 14px 12px;
-    display: flex; flex-direction: column; gap: 10px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.1) transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(20px, 3.2vh, 40px);
+    padding: 10px 16px 12px;
+    min-height: 0;
   }
-  .pillar-actions-list::-webkit-scrollbar { width: 3px; }
-  .pillar-actions-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); }
-
-  .action-bar-wrap {}
-  .action-bar-label {
-    font-size: clamp(11px,1vw,13px); color: rgba(255,255,255,.85);
-    line-height: 1.45; margin-bottom: 5px;
+  .gate-action-label {
+    font-size: clamp(11px,1vw,13.5px); color: var(--ink-dim);
+    line-height: 1.42; margin-bottom: 7px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
-  .action-bar-row { display: flex; align-items: center; gap: 8px; }
-  .action-bar-track {
-    flex: 1; height: 7px; background: rgba(255,255,255,.08);
-    border-radius: 4px; overflow: hidden;
+  .gate-action-row { display: flex; align-items: center; gap: 10px; }
+  .gate-action-track {
+    flex: 1; height: clamp(5px, .7vh, 8px); background: rgba(244,239,228,0.08);
+    border-radius: 3px; overflow: hidden;
   }
-  .action-bar-fill {
-    height: 100%; border-radius: 4px; background: var(--teal);
+  .gate-action-fill {
+    height: 100%; border-radius: 3px; background: var(--gold);
     width: 0%; transition: width .6s cubic-bezier(.4,0,.2,1);
   }
-  .action-bar-count {
-    font-size: clamp(11px,1vw,14px); color: var(--gold);
-    font-weight: 700; flex-shrink: 0; min-width: 20px; text-align: right;
+  .gate-action-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(10.5px,.95vw,13px); color: var(--gold); font-weight: 700;
+    flex-shrink: 0; min-width: 1.4em; text-align: right;
   }
 
-  /* FEED SECTION — bottom half, scrollable */
-  .feed-section {
-    flex: 1;
+  /* ── TICKER: scrolling commitment feed ───────────────────── */
+  .ticker-bar {
+    flex-shrink: 0;
     display: flex;
-    flex-direction: column;
+    align-items: stretch;
+    border-top: 1px solid var(--rule);
+    background: var(--panel);
+    height: clamp(38px,5.2vh,56px);
+  }
+  .ticker-flag {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 18px;
+    background: var(--panel-raised);
+    border-right: 1px solid var(--rule);
+    font-size: clamp(10px,.9vw,12px); font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--coral);
+    white-space: nowrap;
+  }
+  .ticker-flag .live-dot { background: var(--coral); box-shadow: 0 0 0 3px rgba(221,107,66,0.18); }
+  .ticker-viewport {
+    flex: 1;
     overflow: hidden;
-    min-height: 0;
-  }
-  .feed-scroll {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px 16px 14px;
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.12) transparent;
+    align-items: center;
   }
-  .feed-scroll::-webkit-scrollbar { width: 4px; }
-  .feed-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.14); border-radius: 2px; }
-
-  .feed-item {
-    background: rgba(255,255,255,.04);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px;
-    display: flex; align-items: flex-start; gap: 10px;
-    animation: fadeSlide .4s ease forwards;
-    flex-shrink: 0;
+  .ticker-track {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    will-change: transform;
+    padding-left: 100%;
   }
-  @keyframes fadeSlide {
-    from { opacity:0; transform:translateY(6px); }
-    to   { opacity:1; transform:translateY(0); }
+  .ticker-item {
+    font-size: clamp(12px,1.05vw,15px); color: var(--ink);
+    padding: 0 20px;
   }
-  .feed-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--gold); flex-shrink: 0; margin-top: 5px;
-  }
-  .feed-text {
-    font-size: clamp(12px,1.1vw,15px); color: rgba(255,255,255,.9); line-height: 1.55;
-  }
-  .feed-empty {
-    font-size: clamp(12px,1.1vw,14px); color: rgba(255,255,255,.38);
-    font-style: italic; padding: 20px 0; text-align: center;
+  .ticker-sep { color: var(--coral); }
+  .ticker-empty {
+    padding: 0 20px;
+    font-size: clamp(12px,1.05vw,14px); color: var(--ink-faint); font-style: italic;
   }
 
-  /* ── STATUS BAR ───────────────────────────────────────────── */
-  .statusbar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 7px 28px calc(7px + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid var(--border);
-    flex-shrink: 0;
-    background: rgba(0,0,0,.3);
-    gap: 12px; flex-wrap: wrap;
-  }
-  .statusbar-left { font-size: clamp(10px,.9vw,12px); color: rgba(255,255,255,.68); }
-  .statusbar-right {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(10px,.9vw,13px); font-weight: 700; color: var(--gold);
-    display: flex; align-items: center; gap: 6px;
-  }
-  .status-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--teal); animation: pulse 2s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    .flap-digit.flipping { animation: none; }
+    .live-dot { animation: none; }
+    .ticker-track { animation: none !important; padding-left: 20px; }
   }
 
-  /* ── MOBILE: stack vertically, both sections scroll ──────── */
-  @media (max-width: 700px) {
+  /* ── SMALL SCREENS: fall back to a scrollable layout ─────── */
+  @media (max-width: 860px) {
     html, body { overflow: auto; height: auto; }
-    .shell { height: auto; min-height: 100vh; overflow: visible; }
-    .body  { flex-direction: column; overflow: visible; height: auto; }
-    .pillars-section { flex: none; height: auto; overflow: visible; border-bottom: 2px solid var(--border); }
-    .pillars-scroll  { flex-direction: column; overflow-x: visible; overflow-y: visible; height: auto; background: none; gap: 8px; padding: 8px; }
-    .pillar-col { flex: none; min-width: 0; width: 100%; }
-    .pillar-actions-list { overflow-y: visible; max-height: none; }
-    .feed-section { flex: none; height: auto; overflow: visible; }
-    .feed-scroll  { overflow-y: visible; max-height: none; }
-    .topbar { padding: 12px 16px; gap: 10px; }
-    .topbar-title { font-size: 14px; white-space: normal; line-height: 1.3; }
-    .topbar-stats { gap: 10px; }
-    .stat-val { font-size: 22px; }
-    .stat-label { font-size: 11px; }
-    .topbar-divider { height: 24px; }
-    .pcol-title { font-size: 14px; }
-    .pcol-count-num { font-size: 22px; }
-    .action-bar-label { font-size: 12px; }
-    .feed-text { font-size: 13px; }
-    .statusbar { padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); }
-    .statusbar-left { font-size: 11px; }
-    .statusbar-right { font-size: 11px; }
-    .section-header { padding: 8px 14px; }
-  }
-
-  @media (max-width: 400px) {
-    .topbar-stats { flex-wrap: wrap; gap: 8px; }
-    .topbar-divider { display: none; }
-    .stat-val { font-size: 20px; }
-    .pillar-col-header { padding: 12px 14px 8px; }
+    .board { height: auto; min-height: 100vh; overflow: visible; }
+    .hero { flex-direction: column; }
+    .hero-stat + .hero-stat { border-left: none; border-top: 1px solid var(--rule); }
+    .gates { grid-template-columns: 1fr; overflow: visible; }
+    .gate { border-right: none; border-bottom: 1px solid var(--rule); }
+    .gate-actions { justify-content: flex-start; }
+    .header-title { white-space: normal; }
   }
 </style>
 </head>
 <body>
-<div class="shell">
+<div class="board">
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-left">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-id">
       <div class="live-dot"></div>
-      <div class="topbar-text">
-        <div class="topbar-label">Live · Tufunzeni Teacher Summit 2026 · LakeHub, Kisumu</div>
-        <div class="topbar-title">The Future-Ready Teacher — Room Commitment Board</div>
+      <div class="header-text">
+        <div class="header-eyebrow">Live · Tufunzeni Teacher Summit 2026 · LakeHub, Kisumu</div>
+        <div class="header-title">The Future-Ready Teacher — Room Commitment Board</div>
       </div>
     </div>
-    <div class="topbar-stats">
-      <div class="stat-chip">
-        <div class="stat-val" id="statActions">0</div>
-        <div class="stat-label">Actions selected</div>
-      </div>
-      <div class="topbar-divider"></div>
-      <div class="stat-chip">
-        <div class="stat-val" id="statComplete">0</div>
-        <div class="stat-label">Full plans</div>
-      </div>
+    <div class="header-clock" id="clock">--:--:--</div>
+  </div>
+
+  <!-- HERO TOTALS -->
+  <div class="hero">
+    <div class="hero-stat">
+      <div class="hero-stat-label">Commitments logged</div>
+      <div class="flap-group" id="flapTotal"></div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Plans complete</div>
+      <div class="flap-group" id="flapComplete"></div>
     </div>
   </div>
 
-  <!-- BODY -->
-  <div class="body">
+  <!-- GATES: one per pillar -->
+  <div class="gates" id="gates"></div>
 
-    <!-- TOP: PILLARS -->
-    <div class="pillars-section">
-      <div class="section-header">
-        <div class="live-dot"></div>
-        <div class="section-header-title">Pillar commitments — updating live</div>
+  <!-- TICKER -->
+  <div class="ticker-bar">
+    <div class="ticker-flag"><span class="live-dot"></span>Commitments</div>
+    <div class="ticker-viewport">
+      <div class="ticker-track" id="tickerTrack">
+        <span class="ticker-empty" id="tickerEmpty">Personal commitments will scroll here as teachers complete all five pillars…</span>
       </div>
-      <div class="pillars-scroll" id="pillarsScroll"></div>
-    </div>
-
-    <!-- BOTTOM: COMMITMENT FEED -->
-    <div class="feed-section">
-      <div class="section-header">
-        <div class="live-dot"></div>
-        <div class="section-header-title">Anonymous commitments from the room</div>
-      </div>
-      <div class="feed-scroll" id="feedScroll">
-        <div class="feed-empty" id="feedEmpty">Personal commitments will appear here as teachers complete all five pillars…</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- STATUS BAR -->
-  <div class="statusbar">
-    <div class="statusbar-left" id="lastUpdate">Waiting for first commitment…</div>
-    <div class="statusbar-right">
-      <span class="status-dot"></span>
-      nextgenlearnershub.co.ke · Tufunzeni 2026
     </div>
   </div>
 
 </div>
+
 <script>
 const PILLARS = [
   { num:'01', title:'The Great Skills Reset & Adult SEL', actions:[
@@ -380,119 +335,158 @@ const PILLARS = [
   ]},
 ];
 
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 let state = {
   pillarCounts: [0,0,0,0,0],
   actionCounts: [[0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0]],
   totalActions: 0, fullPlans: 0, feed: [],
 };
+let lastFeedKey = null;
+const flapValues = new Map(); // groupEl -> last rendered digit string
 
-function buildGrid() {
-  const scroll = document.getElementById('pillarsScroll');
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── split-flap digit groups ─────────────────────────────── */
+function setFlapGroup(container, value, minDigits) {
+  const digits = String(Math.max(0, Math.trunc(value)));
+  const padded = digits.padStart(minDigits, '0');
+  const prev = flapValues.get(container);
+
+  if (!prev || prev.length !== padded.length) {
+    container.innerHTML = '';
+    for (let i = 0; i < padded.length; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'flap-digit';
+      cell.textContent = padded[i];
+      container.appendChild(cell);
+    }
+    flapValues.set(container, padded);
+    return;
+  }
+
+  const cells = container.children;
+  for (let i = 0; i < padded.length; i++) {
+    if (padded[i] === prev[i]) continue;
+    const cell = cells[i];
+    if (REDUCED_MOTION) {
+      cell.textContent = padded[i];
+      continue;
+    }
+    cell.classList.add('flipping');
+    setTimeout(() => { cell.textContent = padded[i]; }, 170);
+    setTimeout(() => { cell.classList.remove('flipping'); }, 380);
+  }
+  flapValues.set(container, padded);
+}
+
+/* ── gates (pillar columns) ──────────────────────────────── */
+function buildGates() {
+  const wrap = document.getElementById('gates');
   PILLARS.forEach((p, pi) => {
-    const col = document.createElement('div');
-    col.className = 'pillar-col'; col.id = `pcol-${pi}`;
-    col.innerHTML = `
-      <div class="pillar-col-header">
-        <div class="pcol-num">Pillar ${p.num}</div>
-        <div class="pcol-title">${p.title}</div>
-        <div class="pcol-count">
-          <div class="pcol-count-num" id="pcol-count-${pi}">0</div>
-          <div class="pcol-count-label">committed</div>
+    const gate = document.createElement('div');
+    gate.className = 'gate';
+    gate.innerHTML = `
+      <div class="gate-head">
+        <div class="gate-head-text">
+          <div class="gate-num">PILLAR ${p.num}</div>
+          <div class="gate-title">${p.title}</div>
+        </div>
+        <div>
+          <div class="flap-group" id="flapGate-${pi}"></div>
+          <div class="gate-count-label">committed</div>
         </div>
       </div>
-      <div class="pillar-actions-list">
-        ${p.actions.map((a,ai) => `
-          <div class="action-bar-wrap">
-            <div class="action-bar-label">${a}</div>
-            <div class="action-bar-row">
-              <div class="action-bar-track"><div class="action-bar-fill" id="bar-${pi}-${ai}"></div></div>
-              <div class="action-bar-count" id="barcount-${pi}-${ai}"></div>
+      <div class="gate-actions">
+        ${p.actions.map((a, ai) => `
+          <div class="gate-action">
+            <div class="gate-action-label">${a}</div>
+            <div class="gate-action-row">
+              <div class="gate-action-track"><div class="gate-action-fill" id="fill-${pi}-${ai}"></div></div>
+              <div class="gate-action-count" id="count-${pi}-${ai}">0</div>
             </div>
           </div>`).join('')}
       </div>`;
-    scroll.appendChild(col);
+    wrap.appendChild(gate);
   });
 }
 
-function renderState() {
-  // Stats
-  animateNum('statActions',  state.totalActions);
-  animateNum('statComplete', state.fullPlans);
-  document.getElementById('statActions').textContent  = state.totalActions;
-  document.getElementById('statComplete').textContent = state.fullPlans;
-
-  // Pillars
+function renderGates() {
   PILLARS.forEach((p, pi) => {
-    const countEl = document.getElementById(`pcol-count-${pi}`);
-    const newVal  = state.pillarCounts[pi] || 0;
-    if (parseInt(countEl.textContent||0) < newVal) {
-      countEl.classList.add('bump');
-      setTimeout(() => countEl.classList.remove('bump'), 400);
-    }
-    countEl.textContent = newVal;
+    setFlapGroup(document.getElementById(`flapGate-${pi}`), state.pillarCounts[pi] || 0, 2);
 
-    const pillarMax = Math.max(1, ...(state.actionCounts[pi]||[0,0,0]));
-    (state.actionCounts[pi]||[0,0,0]).forEach((count, ai) => {
-      const pct = pillarMax > 0 ? (count / pillarMax) * 100 : 0;
-      const bar = document.getElementById(`bar-${pi}-${ai}`);
-      const cnt = document.getElementById(`barcount-${pi}-${ai}`);
-      if (bar) bar.style.width = pct + '%';
-      if (cnt) cnt.textContent = count > 0 ? count : '';
+    const counts = state.actionCounts[pi] || [0,0,0];
+    const maxCount = Math.max(1, ...counts);
+    counts.forEach((count, ai) => {
+      const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+      const fill = document.getElementById(`fill-${pi}-${ai}`);
+      const label = document.getElementById(`count-${pi}-${ai}`);
+      if (fill) fill.style.width = pct + '%';
+      if (label) label.textContent = count;
     });
   });
-
-  // Feed
-  renderFeed();
-
-  const now = new Date();
-  document.getElementById('lastUpdate').textContent =
-    `Last updated: ${now.toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
 }
 
-function animateNum(id, newVal) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const oldVal = parseInt(el.textContent)||0;
-  if (newVal > oldVal) { el.classList.add('bump'); setTimeout(()=>el.classList.remove('bump'),500); }
-}
+/* ── ticker ───────────────────────────────────────────────── */
+function renderTicker() {
+  const feed = state.feed || [];
+  const key = JSON.stringify(feed);
+  if (key === lastFeedKey) return; // don't restart the scroll on unchanged data
+  lastFeedKey = key;
 
-function renderFeed() {
-  const scroll = document.getElementById('feedScroll');
-  const empty  = document.getElementById('feedEmpty');
-  const items  = scroll.querySelectorAll('.feed-item');
-  items.forEach(el => el.remove());
-
-  if (!state.feed || state.feed.length === 0) {
-    empty.style.display = 'block'; return;
+  const track = document.getElementById('tickerTrack');
+  if (feed.length === 0) {
+    track.style.animation = 'none';
+    track.style.paddingLeft = '20px';
+    track.innerHTML = '<span class="ticker-empty">Personal commitments will scroll here as teachers complete all five pillars…</span>';
+    return;
   }
-  empty.style.display = 'none';
 
-  // Show all, newest at top
-  [...state.feed].reverse().forEach(text => {
-    const item = document.createElement('div');
-    item.className = 'feed-item';
-    item.innerHTML = `<div class="feed-dot"></div><div class="feed-text">${esc(text)}</div>`;
-    scroll.insertBefore(item, scroll.firstChild);
-  });
+  const itemsHtml = feed.map(t => `<span class="ticker-item">${esc(t)}</span>`).join('<span class="ticker-sep">✦</span>');
+  // duplicate the sequence so translateX(-50%) loops seamlessly
+  track.innerHTML = itemsHtml + '<span class="ticker-sep">✦</span>' + itemsHtml + '<span class="ticker-sep">✦</span>';
+  track.style.paddingLeft = '100%';
+
+  if (!REDUCED_MOTION) {
+    const duration = Math.max(24, feed.length * 7);
+    track.style.animation = `tickerScroll ${duration}s linear infinite`;
+  }
 }
 
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// keyframes for the ticker are generated once the first non-empty feed arrives
+const styleSheet = document.createElement('style');
+styleSheet.textContent = '@keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }';
+document.head.appendChild(styleSheet);
+
+/* ── clock ────────────────────────────────────────────────── */
+function tickClock() {
+  const el = document.getElementById('clock');
+  el.textContent = new Date().toLocaleTimeString('en-KE', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
 }
 
+/* ── fetch loop ───────────────────────────────────────────── */
 async function loadState() {
   try {
     const res = await fetch('/api/state', { cache: 'no-store' });
     if (!res.ok) throw new Error(`state fetch failed: ${res.status}`);
-    const data = await res.json();
-    state = { ...state, ...data };
-  } catch(e) {
+    state = { ...state, ...(await res.json()) };
+  } catch (e) {
     console.warn('Live state fetch failed (offline?):', e);
   }
-  renderState();
+  setFlapGroup(document.getElementById('flapTotal'), state.totalActions, 3);
+  setFlapGroup(document.getElementById('flapComplete'), state.fullPlans, 2);
+  renderGates();
+  renderTicker();
 }
 
-buildGrid();
+buildGates();
+setFlapGroup(document.getElementById('flapTotal'), 0, 3);
+setFlapGroup(document.getElementById('flapComplete'), 0, 2);
+renderGates();
+tickClock();
+setInterval(tickClock, 1000);
 loadState();
 setInterval(loadState, 4000);
 </script>
