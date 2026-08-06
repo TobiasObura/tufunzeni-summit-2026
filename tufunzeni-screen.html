@@ -24,6 +24,14 @@
     --crease:      rgba(0,0,0,0.4);
   }
 
+  /* one hue per pillar — background, flap-tile, and numerals all shift together
+     so a column is identifiable by color alone, not just its position */
+  .gate[data-pillar="1"] { --gate-bg:#0E2620; --gate-raised:#123024; --gate-accent:#3FBE9B; }
+  .gate[data-pillar="2"] { --gate-bg:#2A2412; --gate-raised:#352D16; --gate-accent:#E7B23E; }
+  .gate[data-pillar="3"] { --gate-bg:#2A1710; --gate-raised:#351D14; --gate-accent:#E67A4E; }
+  .gate[data-pillar="4"] { --gate-bg:#0F2130; --gate-raised:#142A3C; --gate-accent:#5B9BD9; }
+  .gate[data-pillar="5"] { --gate-bg:#251019; --gate-raised:#301521; --gate-accent:#D97AA0; }
+
   html, body {
     height: 100%;
     font-family: 'Inter', sans-serif;
@@ -139,8 +147,8 @@
     flex-direction: column;
     min-width: 0;
     min-height: 0;
-    background: var(--panel);
-    border-right: 1px solid var(--rule);
+    background: var(--gate-bg, var(--panel));
+    border-right: 1px solid var(--rule-strong);
   }
   .gate:last-child { border-right: none; }
   .gate-head {
@@ -156,7 +164,7 @@
   .gate-num {
     font-family: 'IBM Plex Mono', monospace;
     font-size: clamp(10px,.85vw,12px); font-weight: 500;
-    letter-spacing: .1em; color: var(--coral);
+    letter-spacing: .1em; color: var(--gate-accent, var(--coral));
   }
   .gate-title {
     font-family: 'Syne', sans-serif;
@@ -164,7 +172,11 @@
     line-height: 1.28; margin-top: 2px;
   }
   .gate .flap-group { margin-left: 0; flex-shrink: 0; perspective: 200px; }
-  .gate .flap-digit { width: clamp(16px,1.7vw,24px); height: clamp(24px,3vh,36px); font-size: clamp(13px,1.9vh,20px); }
+  .gate .flap-digit {
+    width: clamp(16px,1.7vw,24px); height: clamp(24px,3vh,36px); font-size: clamp(13px,1.9vh,20px);
+    background: var(--gate-raised, var(--panel-raised));
+    color: var(--gate-accent, var(--gold));
+  }
   .gate-count-label {
     font-size: clamp(8px,.7vw,10px); color: var(--ink-faint);
     text-transform: uppercase; letter-spacing: .08em;
@@ -191,13 +203,13 @@
     border-radius: 3px; overflow: hidden;
   }
   .gate-action-fill {
-    height: 100%; border-radius: 3px; background: var(--gold);
+    height: 100%; border-radius: 3px; background: var(--gate-accent, var(--gold));
     width: 0%; transition: width .6s cubic-bezier(.4,0,.2,1);
   }
   .gate-action-count {
     font-family: 'IBM Plex Mono', monospace;
     font-variant-numeric: tabular-nums;
-    font-size: clamp(10.5px,.95vw,13px); color: var(--gold); font-weight: 700;
+    font-size: clamp(10.5px,.95vw,13px); color: var(--gate-accent, var(--gold)); font-weight: 700;
     flex-shrink: 0; min-width: 1.4em; text-align: right;
   }
 
@@ -388,6 +400,7 @@ function buildGates() {
   PILLARS.forEach((p, pi) => {
     const gate = document.createElement('div');
     gate.className = 'gate';
+    gate.dataset.pillar = pi + 1;
     gate.innerHTML = `
       <div class="gate-head">
         <div class="gate-head-text">
