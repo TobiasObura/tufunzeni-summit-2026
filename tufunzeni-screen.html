@@ -16,6 +16,7 @@
     --ink:         #1A1A1A;
     --ink-2:       #444444;
     --ink-3:       #888888;
+    --caption-on-tint: #666666;  /* darker than ink-3 — stays AA-legible on the tinted pillar cards */
     --border:      #E2E0DA;
     --radius:      16px;
     --radius-sm:   10px;
@@ -162,7 +163,7 @@
     flex-direction: column;
     min-width: 0;
     min-height: 0;
-    background: var(--card);
+    background: var(--gate-tint, var(--card));
     border-radius: var(--radius);
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     overflow: hidden;
@@ -178,14 +179,14 @@
     font-family: 'Syne', sans-serif;
     font-size: clamp(64px, 8vw, 110px); font-weight: 800;
     color: var(--gate-vivid);
-    opacity: 0.09;
+    opacity: 0.15;
     line-height: 1;
     letter-spacing: -4px;
     pointer-events: none;
   }
   .gate-head {
     padding: 16px 16px 10px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
@@ -206,12 +207,12 @@
   .gate .flap-group { margin-left: 0; flex-shrink: 0; perspective: 200px; }
   .gate .flap-digit {
     width: clamp(16px,1.7vw,24px); height: clamp(24px,3vh,36px); font-size: clamp(13px,1.9vh,20px);
-    background: var(--gate-tint, var(--teal-light));
+    background: var(--card);
     color: var(--gate-text, var(--teal));
-    border-color: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.08);
   }
   .gate-count-label {
-    font-size: clamp(8px,.7vw,10px); color: var(--ink-3);
+    font-size: clamp(8px,.7vw,10px); color: var(--caption-on-tint);
     text-transform: uppercase; letter-spacing: .08em;
     text-align: right; margin-top: 3px;
   }
@@ -233,7 +234,7 @@
   }
   .gate-action-row { display: flex; align-items: center; gap: 10px; }
   .gate-action-track {
-    flex: 1; height: clamp(5px, .7vh, 8px); background: var(--border);
+    flex: 1; height: clamp(5px, .7vh, 8px); background: rgba(0,0,0,0.1);
     border-radius: 3px; overflow: hidden;
   }
   .gate-action-fill {
