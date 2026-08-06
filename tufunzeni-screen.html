@@ -10,32 +10,42 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    /* deep teal-charcoal ground, not literal black — ties to the summit's teal brand */
-    --ground:      #0B1D17;
-    --panel:       #12291F;
-    --panel-raised:#173428;
-    --rule:        rgba(244,238,224,0.13);
-    --rule-strong: rgba(244,238,224,0.24);
-    --ink:         #F4EFE2;
-    --ink-dim:     rgba(244,239,228,0.56);
-    --ink-faint:   rgba(244,239,228,0.32);
-    --gold:        #E7B23E;
-    --coral:       #DD6B42;
-    --crease:      rgba(0,0,0,0.4);
+    /* same warm, light palette as the worksheet — cream ground, white cards */
+    --bg:          #F7F6F2;
+    --card:        #FFFFFF;
+    --ink:         #1A1A1A;
+    --ink-2:       #444444;
+    --ink-3:       #888888;
+    --border:      #E2E0DA;
+    --radius:      16px;
+    --radius-sm:   10px;
+
+    --teal:        #0E6656;
+    --teal-light:  #E6F2F0;
+    --gold:        #D9A61A;
+    --gold-light:  #FBF4DC;
+    --gold-deep:   #886512;   /* text-safe gold for numerals on light backgrounds */
+    --orange:      #E07B39;
+    --orange-light:#FCEEE3;
+    --orange-deep: #B04E28;   /* text-safe orange for numerals on light backgrounds */
+    --navy:        #1F3A5F;
+    --navy-light:  #EAF0F8;
+    --plum:        #7A3255;
+    --plum-light:  #F3E7EE;
   }
 
-  /* one hue per pillar — background, flap-tile, and numerals all shift together
-     so a column is identifiable by color alone, not just its position */
-  .gate[data-pillar="1"] { --gate-bg:#0E2620; --gate-raised:#123024; --gate-accent:#3FBE9B; }
-  .gate[data-pillar="2"] { --gate-bg:#2A2412; --gate-raised:#352D16; --gate-accent:#E7B23E; }
-  .gate[data-pillar="3"] { --gate-bg:#2A1710; --gate-raised:#351D14; --gate-accent:#E67A4E; }
-  .gate[data-pillar="4"] { --gate-bg:#0F2130; --gate-raised:#142A3C; --gate-accent:#5B9BD9; }
-  .gate[data-pillar="5"] { --gate-bg:#251019; --gate-raised:#301521; --gate-accent:#D97AA0; }
+  /* one hue per pillar — top band, ghost numeral, flap digits and bars all match,
+     so a column reads by color alone from across the room */
+  .gate[data-pillar="1"] { --gate-tint:var(--teal-light);   --gate-vivid:var(--teal);   --gate-text:var(--teal); }
+  .gate[data-pillar="2"] { --gate-tint:var(--gold-light);   --gate-vivid:var(--gold);   --gate-text:var(--gold-deep); }
+  .gate[data-pillar="3"] { --gate-tint:var(--orange-light); --gate-vivid:var(--orange); --gate-text:var(--orange-deep); }
+  .gate[data-pillar="4"] { --gate-tint:var(--navy-light);   --gate-vivid:var(--navy);   --gate-text:var(--navy); }
+  .gate[data-pillar="5"] { --gate-tint:var(--plum-light);   --gate-vivid:var(--plum);   --gate-text:var(--plum); }
 
   html, body {
     height: 100%;
     font-family: 'Inter', sans-serif;
-    background: var(--ground);
+    background: var(--bg);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
@@ -46,24 +56,23 @@
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
+    padding: 18px 22px;
+    gap: 14px;
   }
 
-  /* ── HEADER MARQUEE ───────────────────────────────────────── */
+  /* ── HEADER ───────────────────────────────────────────────── */
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding: 16px 28px;
-    border-bottom: 1px solid var(--rule);
     flex-shrink: 0;
-    background: linear-gradient(180deg, rgba(231,178,62,0.06), transparent);
   }
   .header-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .live-dot {
     width: 10px; height: 10px; border-radius: 50%;
     background: var(--gold); flex-shrink: 0;
-    box-shadow: 0 0 0 3px rgba(231,178,62,0.18);
+    box-shadow: 0 0 0 3px rgba(217,166,26,0.22);
     animation: pulse 2s ease-in-out infinite;
   }
   @keyframes pulse {
@@ -73,17 +82,17 @@
   .header-text { min-width: 0; }
   .header-eyebrow {
     font-size: clamp(10px,1vw,12px); font-weight: 600;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--gold);
+    letter-spacing: .14em; text-transform: uppercase; color: var(--orange);
   }
   .header-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(15px,1.7vw,22px); font-weight: 800; color: var(--ink);
+    font-size: clamp(16px,1.8vw,24px); font-weight: 800; color: var(--ink);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .header-clock {
     font-family: 'IBM Plex Mono', monospace;
     font-variant-numeric: tabular-nums;
-    font-size: clamp(14px,1.6vw,20px); font-weight: 500; color: var(--ink-dim);
+    font-size: clamp(14px,1.6vw,20px); font-weight: 500; color: var(--ink-3);
     flex-shrink: 0;
   }
 
@@ -91,19 +100,21 @@
   .hero {
     display: flex;
     flex-shrink: 0;
-    border-bottom: 1px solid var(--rule);
+    gap: 14px;
   }
   .hero-stat {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 14px 28px;
+    gap: 18px;
+    padding: 16px 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
-  .hero-stat + .hero-stat { border-left: 1px solid var(--rule); }
   .hero-stat-label {
     font-size: clamp(11px,1vw,13px); font-weight: 600;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-dim);
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
     max-width: 11ch; line-height: 1.4;
   }
   .flap-group { display: flex; gap: 4px; perspective: 400px; margin-left: auto; }
@@ -112,19 +123,21 @@
     font-family: 'IBM Plex Mono', monospace;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
-    background: var(--panel-raised);
-    border: 1px solid var(--rule);
+    background: var(--teal-light);
+    border: 1px solid var(--border);
     border-radius: 4px;
     display: flex; align-items: center; justify-content: center;
-    color: var(--gold);
+    color: var(--teal);
     transform-style: preserve-3d;
   }
   .flap-digit::after {
     content: '';
     position: absolute; left: 0; right: 0; top: 50%;
-    height: 1px; background: var(--crease);
+    height: 1px; background: rgba(0,0,0,0.08);
     transform: translateY(-.5px);
   }
+  #flapTotal .flap-digit { color: var(--teal); background: var(--teal-light); }
+  #flapComplete .flap-digit { color: var(--gold-deep); background: var(--gold-light); }
   .hero .flap-digit { width: clamp(30px,3.6vw,54px); height: clamp(46px,6.4vh,84px); font-size: clamp(24px,4.6vh,56px); border-radius: 6px; }
   @keyframes flapFlip {
     0%   { transform: rotateX(0deg); }
@@ -134,51 +147,71 @@
   }
   .flap-digit.flipping { animation: flapFlip .38s ease-in-out; }
 
-  /* ── GATES GRID: one column per pillar ───────────────────── */
+  /* ── GATES GRID: one card per pillar ─────────────────────── */
   .gates {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
     min-height: 0;
     overflow: hidden;
   }
   .gate {
+    position: relative;
     display: flex;
     flex-direction: column;
     min-width: 0;
     min-height: 0;
-    background: var(--gate-bg, var(--panel));
-    border-right: 1px solid var(--rule-strong);
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
   }
-  .gate:last-child { border-right: none; }
+  .gate::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: var(--gate-vivid);
+  }
+  .gate-ghost {
+    position: absolute;
+    right: -10px; bottom: -22px;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(64px, 8vw, 110px); font-weight: 800;
+    color: var(--gate-vivid);
+    opacity: 0.09;
+    line-height: 1;
+    letter-spacing: -4px;
+    pointer-events: none;
+  }
   .gate-head {
-    padding: 12px 16px 10px;
-    border-bottom: 1px solid var(--rule);
+    padding: 16px 16px 10px;
+    border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
+    position: relative;
   }
   .gate-head-text { min-width: 0; }
   .gate-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: clamp(10px,.85vw,12px); font-weight: 500;
-    letter-spacing: .1em; color: var(--gate-accent, var(--coral));
+    font-size: clamp(10px,.85vw,12px); font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--gate-text, var(--orange));
   }
   .gate-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(12px,1.15vw,15px); font-weight: 700; color: var(--ink);
-    line-height: 1.28; margin-top: 2px;
+    font-size: clamp(12.5px,1.15vw,15px); font-weight: 700; color: var(--ink);
+    line-height: 1.28; margin-top: 3px;
   }
   .gate .flap-group { margin-left: 0; flex-shrink: 0; perspective: 200px; }
   .gate .flap-digit {
     width: clamp(16px,1.7vw,24px); height: clamp(24px,3vh,36px); font-size: clamp(13px,1.9vh,20px);
-    background: var(--gate-raised, var(--panel-raised));
-    color: var(--gate-accent, var(--gold));
+    background: var(--gate-tint, var(--teal-light));
+    color: var(--gate-text, var(--teal));
+    border-color: rgba(0,0,0,0.06);
   }
   .gate-count-label {
-    font-size: clamp(8px,.7vw,10px); color: var(--ink-faint);
+    font-size: clamp(8px,.7vw,10px); color: var(--ink-3);
     text-transform: uppercase; letter-spacing: .08em;
     text-align: right; margin-top: 3px;
   }
@@ -188,28 +221,29 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: clamp(20px, 3.2vh, 40px);
-    padding: 10px 16px 12px;
+    gap: clamp(18px, 2.8vh, 34px);
+    padding: 10px 16px 14px;
     min-height: 0;
+    position: relative;
   }
   .gate-action-label {
-    font-size: clamp(11px,1vw,13.5px); color: var(--ink-dim);
+    font-size: clamp(11px,1vw,13.5px); color: var(--ink-2);
     line-height: 1.42; margin-bottom: 7px;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   }
   .gate-action-row { display: flex; align-items: center; gap: 10px; }
   .gate-action-track {
-    flex: 1; height: clamp(5px, .7vh, 8px); background: rgba(244,239,228,0.08);
+    flex: 1; height: clamp(5px, .7vh, 8px); background: var(--border);
     border-radius: 3px; overflow: hidden;
   }
   .gate-action-fill {
-    height: 100%; border-radius: 3px; background: var(--gate-accent, var(--gold));
+    height: 100%; border-radius: 3px; background: var(--gate-vivid, var(--teal));
     width: 0%; transition: width .6s cubic-bezier(.4,0,.2,1);
   }
   .gate-action-count {
     font-family: 'IBM Plex Mono', monospace;
     font-variant-numeric: tabular-nums;
-    font-size: clamp(10.5px,.95vw,13px); color: var(--gate-accent, var(--gold)); font-weight: 700;
+    font-size: clamp(10.5px,.95vw,13px); color: var(--gate-text, var(--teal)); font-weight: 700;
     flex-shrink: 0; min-width: 1.4em; text-align: right;
   }
 
@@ -218,21 +252,22 @@
     flex-shrink: 0;
     display: flex;
     align-items: stretch;
-    border-top: 1px solid var(--rule);
-    background: var(--panel);
-    height: clamp(38px,5.2vh,56px);
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    height: clamp(40px,5.4vh,58px);
+    overflow: hidden;
   }
   .ticker-flag {
     flex-shrink: 0;
     display: flex; align-items: center; gap: 8px;
     padding: 0 18px;
-    background: var(--panel-raised);
-    border-right: 1px solid var(--rule);
-    font-size: clamp(10px,.9vw,12px); font-weight: 600;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--coral);
+    background: var(--teal-light);
+    font-size: clamp(10px,.9vw,12px); font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--teal);
     white-space: nowrap;
   }
-  .ticker-flag .live-dot { background: var(--coral); box-shadow: 0 0 0 3px rgba(221,107,66,0.18); }
+  .ticker-flag .live-dot { background: var(--teal); box-shadow: 0 0 0 3px rgba(14,102,86,0.16); }
   .ticker-viewport {
     flex: 1;
     overflow: hidden;
@@ -248,13 +283,13 @@
     padding-left: 100%;
   }
   .ticker-item {
-    font-size: clamp(12px,1.05vw,15px); color: var(--ink);
+    font-size: clamp(12px,1.05vw,15px); color: var(--ink-2);
     padding: 0 20px;
   }
-  .ticker-sep { color: var(--coral); }
+  .ticker-sep { color: var(--gold-deep); }
   .ticker-empty {
     padding: 0 20px;
-    font-size: clamp(12px,1.05vw,14px); color: var(--ink-faint); font-style: italic;
+    font-size: clamp(12px,1.05vw,14px); color: var(--ink-3); font-style: italic;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -268,10 +303,9 @@
     html, body { overflow: auto; height: auto; }
     .board { height: auto; min-height: 100vh; overflow: visible; }
     .hero { flex-direction: column; }
-    .hero-stat + .hero-stat { border-left: none; border-top: 1px solid var(--rule); }
     .gates { grid-template-columns: 1fr; overflow: visible; }
-    .gate { border-right: none; border-bottom: 1px solid var(--rule); }
     .gate-actions { justify-content: flex-start; }
+    .gate-ghost { display: none; }
     .header-title { white-space: normal; }
   }
 </style>
@@ -402,9 +436,10 @@ function buildGates() {
     gate.className = 'gate';
     gate.dataset.pillar = pi + 1;
     gate.innerHTML = `
+      <div class="gate-ghost">${p.num}</div>
       <div class="gate-head">
         <div class="gate-head-text">
-          <div class="gate-num">PILLAR ${p.num}</div>
+          <div class="gate-num">Pillar ${p.num}</div>
           <div class="gate-title">${p.title}</div>
         </div>
         <div>
